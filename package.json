@@ -1,0 +1,1 @@
+{ "name": "mohammedridwan.com", "private": true, "type": "module", "scripts": { "build": "node build.js" } }

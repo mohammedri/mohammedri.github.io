@@ -1,17 +1,39 @@
-/* Ridwan Site v5 — palette: chiffon #F1F0CC, evergreen #193627, flame #FF4100, fawn #D5BF86, mahogany #3F0D12 */
+/* mohammedridwan.com — paper #F9F6E8, evergreen #193627, flame #FF4100, fawn #D5BF86, chiffon #F1F0CC */
 
-html, body { margin: 0; padding: 0; background: #F1F0CC; }
-body { font-family: 'Instrument Serif', serif; color: #193627; }
+@font-face { font-family: 'ET Book'; src: url('/assets/fonts/et-book-roman.woff') format('woff'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'ET Book'; src: url('/assets/fonts/et-book-italic.woff') format('woff'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'ET Book'; src: url('/assets/fonts/et-book-bold.woff') format('woff'); font-weight: 600; font-style: normal; font-display: swap; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.16 0 0 0 0.11 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E") repeat,
+    #F9F6E8;
+}
+body { font-family: 'ET Book', Palatino, Georgia, serif; color: #193627; }
 a { color: #193627; text-decoration: none; }
 a:hover { color: #FF4100; }
 ::selection { background: #FF4100; color: #F1F0CC; }
 [hidden] { display: none !important; }
 
-@keyframes blink { 50% { opacity: 0; } }
+/* paper grain over everything */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.36 0 0 0 0 0.24 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E") repeat;
+}
+
 @keyframes tapRipple {
   0% { transform: translate(-50%, -50%) scale(0.25); opacity: 1; }
   100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
 }
+@keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---- frame ---- */
 .frame {
@@ -20,23 +42,33 @@ a:hover { color: #FF4100; }
   flex-direction: column;
   border: 14px solid #193627;
   box-sizing: border-box;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  animation: pageIn 0.5s ease 0.06s backwards;
 }
-.frame.entered { opacity: 1; }
+@media (max-width: 640px) { .frame { border: none; } }
+html.is-mobile .frame { border: none; }
 
 /* ---- nav ---- */
 .nav {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: flex-start;
   max-width: 920px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  padding: clamp(56px, 10vh, 96px) 24px 0;
+  padding: clamp(72px, 12vh, 120px) 24px 0;
 }
 .nav .spacer { flex: 1; }
+.nav .nav-break { order: -1; flex-basis: 0; height: 0; }
+@media (max-width: 640px) {
+  .nav .spacer { display: none; }
+  .nav .nav-break { flex-basis: 100%; }
+  .nav .pill-group { order: -2; }
+}
+html.is-mobile .nav .spacer { display: none; }
+html.is-mobile .nav .nav-break { flex-basis: 100%; }
+html.is-mobile .nav .pill-group { order: -2; }
 
 .pill {
   font-size: 19px;
@@ -68,11 +100,7 @@ a:hover { color: #FF4100; }
 
 .menu { position: relative; }
 .menu-toggle { display: flex; align-items: center; gap: 8px; }
-.chev {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 11px;
-  transition: transform 0.2s;
-}
+.chev { font-size: 11px; transition: transform 0.2s; }
 .menu.open .chev { transform: rotate(180deg); }
 
 .dropdown {
@@ -83,6 +111,7 @@ a:hover { color: #FF4100; }
   display: flex;
   flex-direction: column;
   min-width: 230px;
+  max-width: calc(100vw - 72px);
   background: #F8F7E4;
   border: 1px solid rgba(25, 54, 39, 0.18);
   border-radius: 14px;
@@ -91,7 +120,6 @@ a:hover { color: #FF4100; }
 }
 .dropdown-wide { min-width: 320px; }
 .dropdown-label {
-  font-family: 'Instrument Serif', serif;
   font-style: italic;
   font-size: 15px;
   color: #193627;
@@ -124,7 +152,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 }
 .dropdown-sep { height: 1px; background: rgba(25, 54, 39, 0.14); margin: 6px 8px; }
 .dropdown-note {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 13px;
   line-height: 1.55;
   color: #193627;
@@ -168,7 +195,7 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   color: #FF4100;
 }
 .seg.icon { justify-content: center; width: 42px; padding: 0; }
-.seg.glyph { font-family: 'Instrument Sans', sans-serif; font-size: 16px; font-weight: 500; }
+.seg.glyph { font-size: 16px; font-weight: 500; }
 
 /* ---- content ---- */
 .content {
@@ -177,36 +204,41 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  padding: clamp(40px, 7vh, 64px) 24px 40px;
+  padding: clamp(52px, 9vh, 84px) 24px 0;
   position: relative;
   z-index: 1;
 }
 
 /* ---- letter ---- */
 .letter {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 17px;
+  font-size: clamp(20px, 5vw, 23px);
   line-height: 1.7;
   color: #193627;
 }
-.letter p { margin: 0; }
+.letter p { margin: 0 0 22px; }
 .letter .greeting {
-  font-family: 'Instrument Serif', serif;
-  font-size: 34px;
+  font-size: clamp(28px, 7vw, 34px);
   line-height: 1.2;
 }
-.letter .flame { color: #FF4100; }
-.letter .nowrap { white-space: nowrap; }
-.letter .inline-fav {
+.about-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 6px 0 26px;
+  border-radius: 6px;
+  border: 1px solid rgba(25, 54, 39, 0.2);
+  box-shadow: 0 2px 12px rgba(25, 54, 39, 0.14);
+  box-sizing: border-box;
+}
+.flame { color: #FF4100; }
+.nowrap { white-space: nowrap; }
+.inline-fav {
   border-radius: 3px;
   vertical-align: baseline;
   margin-right: 4px;
   transform: translateY(1px);
 }
-.letter .inline-face {
+.inline-face {
   border-radius: 999px;
   object-fit: cover;
   vertical-align: baseline;
@@ -214,13 +246,12 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   transform: translateY(2px);
 }
 .letter .on-people {
-  font-family: 'Instrument Serif', serif;
   font-weight: 400;
   font-size: 20px;
   color: #FF4100;
 }
 .letter .signature {
-  font-family: 'Instrument Serif', serif;
+  margin: 0;
   font-style: italic;
   font-size: 22px;
   color: #FF4100;
@@ -228,15 +259,13 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 
 /* ---- writing ---- */
 .page-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 34px;
+  font-size: clamp(28px, 7vw, 34px);
   font-weight: 400;
   color: #193627;
   margin: 0 0 18px;
 }
 .topic-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 40px; }
 .chip {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 13px;
   line-height: 1;
   padding: 8px 14px 9px;
@@ -252,7 +281,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 
 .topic-sections { display: flex; flex-direction: column; gap: 44px; }
 .topic-heading {
-  font-family: 'Instrument Serif', serif;
   font-size: 22px;
   font-weight: 400;
   font-style: italic;
@@ -262,9 +290,10 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 .essay-list { display: flex; flex-direction: column; }
 .essay-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  gap: 20px;
+  gap: 4px 20px;
   padding: 13px 0;
   border-bottom: 1px solid rgba(25, 54, 39, 0.14);
   color: #193627;
@@ -275,11 +304,10 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   display: inline-flex;
   align-items: baseline;
   gap: 10px;
-  font-size: 21px;
+  font-size: clamp(18px, 4.6vw, 21px);
   line-height: 1.3;
 }
 .badge-popular {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -293,7 +321,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   transform: translateY(-2px);
 }
 .essay-date {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 13px;
   color: #193627;
   opacity: 0.55;
@@ -303,7 +330,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 /* ---- reading ---- */
 .page-title.tight { margin: 0 0 8px; }
 .page-sub {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 15px;
   color: #193627;
   opacity: 0.65;
@@ -311,13 +337,13 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 }
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 22px;
 }
 .book-card {
-  background: #FBFAF2;
+  background: #F8F7E4;
   border: 1px solid rgba(25, 54, 39, 0.14);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 30px 24px 24px;
   display: flex;
   flex-direction: column;
@@ -336,10 +362,10 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   width: 148px;
   height: 218px;
   transform-style: preserve-3d;
-  transform: rotateY(-30deg) rotateX(2deg);
-  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: rotateY(-28deg) rotateX(2deg);
+  transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.book:hover { transform: rotateY(-13deg) rotateX(1deg) translateY(-5px) scale(1.04); }
+.book:hover { transform: rotateY(-12deg) rotateX(1deg) translateY(-5px) scale(1.04); }
 .book-back {
   position: absolute;
   inset: 0;
@@ -386,14 +412,12 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   box-sizing: border-box;
 }
 .book-front .spine-title {
-  font-family: 'Instrument Serif', serif;
   font-size: 17px;
   line-height: 1.25;
   color: #F1F0CC;
   text-align: center;
 }
 .book-front .spine-author {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.08em;
   color: #D5BF86;
@@ -414,20 +438,17 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 }
 .book-meta { display: flex; flex-direction: column; gap: 4px; }
 .book-meta .b-title {
-  font-family: 'Instrument Serif', serif;
   font-size: 21px;
   line-height: 1.25;
   color: #193627;
 }
 .book-meta .b-author {
-  font-family: 'Instrument Serif', serif;
   font-style: italic;
-  font-size: 15px;
+  font-size: 13px;
   color: #193627;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 .book-meta .b-review {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 13.5px;
   line-height: 1.6;
   color: #193627;
@@ -439,7 +460,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 .back-link { font-size: 19px; color: #193627; opacity: 0.75; }
 .back-link:hover { color: #FF4100; opacity: 1; }
 .article-title {
-  font-family: 'Instrument Serif', serif;
   font-size: clamp(30px, 4vw, 42px);
   font-weight: 400;
   color: #193627;
@@ -447,7 +467,6 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   margin: 22px 0 8px;
 }
 .article-date {
-  font-family: 'Instrument Sans', sans-serif;
   font-size: 14px;
   color: #193627;
   opacity: 0.55;
@@ -456,17 +475,16 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 .article-body { display: flex; flex-direction: column; gap: 18px; }
 .article-body strong { font-weight: 600; }
 .blk-p, .blk-h, .blk-q, .blk-note { line-height: 1.6; color: #193627; margin: 0; }
-.blk-p { font-family: 'Instrument Sans', sans-serif; font-size: 17px; }
-.blk-h { font-family: 'Instrument Serif', serif; font-size: 24px; margin-top: 14px; }
+.blk-p { font-size: clamp(19px, 4.8vw, 21px); }
+.blk-h { font-size: clamp(22px, 5.6vw, 26px); margin-top: 14px; }
 .blk-q {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 16.5px;
+  font-size: clamp(19px, 4.8vw, 21px);
   font-style: italic;
   opacity: 0.9;
   padding: 0 0 0 18px;
   border-left: 2px solid #FF4100;
 }
-.blk-note { font-family: 'Instrument Sans', sans-serif; font-size: 14px; opacity: 0.6; margin-top: 8px; }
+.blk-note { font-size: 15px; opacity: 0.6; margin-top: 8px; }
 .blk-li { display: flex; gap: 12px; align-items: baseline; padding-left: 6px; }
 .blk-li .dot {
   width: 6px;
@@ -477,8 +495,7 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
   transform: translateY(-2px);
 }
 .blk-li p {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 16px;
+  font-size: clamp(18px, 4.6vw, 20px);
   line-height: 1.65;
   color: #193627;
   margin: 0;
@@ -504,7 +521,7 @@ a.dropdown-item:hover { background: rgba(25, 54, 39, 0.06); color: #FF4100; }
 }
 
 /* ---- footer ---- */
-.footer-wrap { position: relative; z-index: 0; margin-top: -150px; }
+.footer-wrap { position: relative; z-index: 0; margin-top: 40px; }
 .mosaic {
   display: flex;
   flex-direction: column;
