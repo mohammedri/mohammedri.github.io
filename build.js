@@ -5,6 +5,7 @@ import path from 'node:path';
 import { essays } from './essays.js';
 
 const SITE = 'https://mohammedridwan.com';
+const BRAND = 'Mohammed Ridwan | Co-founder & CEO @ Pluto';
 const OUT = path.dirname(new URL(import.meta.url).pathname);
 const TOPIC_ORDER = ['Startups & Product', 'AI & Machine Learning', 'People & Ideas', 'VR'];
 
@@ -91,6 +92,10 @@ function page({ title, desc, urlPath, current, content, headExtra = '' }) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${SITE}${urlPath}">
 <meta property="og:type" content="${urlPath.startsWith('/writing/') && urlPath !== '/writing/' ? 'article' : 'website'}">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/et-book-roman.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/assets/fonts/et-book-italic.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/css/styles.css">
@@ -206,25 +211,25 @@ const write = (rel, s) => {
 };
 
 write('index.html', page({
-  title: 'Mohammed Ridwan', desc: 'Mohammed Ridwan — Co-founder & CEO at Pluto. Writing on startups, product, AI and people.',
+  title: BRAND, desc: 'Mohammed Ridwan — Co-founder & CEO at Pluto. Writing on startups, product, AI and people.',
   urlPath: '/', current: 'letter', content: letterContent, headExtra: hashRedirect,
 }));
 write('writing/index.html', page({
-  title: 'Writing — Mohammed Ridwan', desc: 'Essays on startups & product, AI & machine learning, people & ideas, and VR.',
+  title: `Writing — ${BRAND}`, desc: 'Essays on startups & product, AI & machine learning, people & ideas, and VR.',
   urlPath: '/writing/', current: 'writing', content: writingContent,
 }));
 for (const e of essays) {
   write(`writing/${slugify(e.title)}/index.html`, page({
-    title: `${e.title} — Mohammed Ridwan`, desc: articleDesc(e),
+    title: `${e.title} — ${BRAND}`, desc: articleDesc(e),
     urlPath: `/writing/${slugify(e.title)}/`, current: 'writing', content: articleContent(e),
   }));
 }
 write('reading/index.html', page({
-  title: 'Reading — Mohammed Ridwan', desc: 'Personal book recommendations that I keep coming back to.',
+  title: `Reading — ${BRAND}`, desc: 'Personal book recommendations that I keep coming back to.',
   urlPath: '/reading/', current: 'reading', content: readingContent,
 }));
 write('404.html', page({
-  title: 'Not found — Mohammed Ridwan', desc: 'Page not found.',
+  title: `Not found — ${BRAND}`, desc: 'Page not found.',
   urlPath: '/404.html', current: '', content: `    <h1 class="page-title">Not found</h1>
     <p class="page-sub">That page doesn&rsquo;t exist (any more). Try the <a href="/" class="flame">About letter</a> or <a href="/writing/" class="flame">Writing</a>.</p>`,
 }));
